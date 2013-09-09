@@ -46,7 +46,7 @@ module Factory
     # Parse a text string if that was defined
     def parse_text
       @doc = Nokogiri::XML(wrap(@text)) do |config|
-        #config.strict
+        config.strict
       end
     rescue
       log("Error parsing text: #{text}, couldn't continue. Probably faulty HTML")
