@@ -23,21 +23,18 @@ module Factory
 
     # Strip out HREFs which contain a given tag and return the 
     def unlink!
-      parse
-      if @doc.errors.any?
-        puts @doc.errors.join("\n")
-
-      else
-        @tags.each do |tag|
-          @doc.xpath("//a[ends_with(@href,'#{tag}')]", EndsWithFilter.new).each do |element|
-            element.swap(element.children)
-          end
+      parse   
+      @tags.each do |tag|
+        @doc.xpath("//a[ends_with(@href,'#{tag}')]", EndsWithFilter.new).each do |element|
+          element.swap(element.children)
         end
-
       end
       @doc.xpath("/#{@wrap_tag}/body/p").inner_html
     end
 
+    def errors
+      @doc.errors
+    end
 
     # Open the file from the filename and parse it with Nokogiri into an XML document
     # Rescue parser exceptions and log them, then close the file
@@ -61,13 +58,9 @@ module Factory
     # Parse a file from file or filename if that was defined.
     def parse_file
       @file ||= File.open(@file_name) unless @file_name.nil?
-      @doc = Nokogiri::HTML(wrap(@file.readlines)) do |config|
-        #config.strict
-      end
-    rescue Exception => e
-      log("Error parsing file #{@file_name}, couldn't continue. #{e}")
-    ensure
+      @text = @file.readlines
       @file.close unless @file.nil?
+      parse_text
     end
 
 
