@@ -29,7 +29,9 @@ module Factory
           element.swap(element.children)
         end
       end
-      @doc.xpath("/#{@wrap_tag}/body/p").inner_html
+      output = @doc.xpath("/#{@wrap_tag}/body/p").inner_html
+      output = @doc.xpath("/#{@wrap_tag}/body").inner_html if output == ""
+      output
     end
 
     def errors

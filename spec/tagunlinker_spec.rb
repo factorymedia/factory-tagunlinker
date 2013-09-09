@@ -60,4 +60,16 @@ As it turns out, this didn't stop them at all. So the guys popped out this littl
     unlinker.unlink!.should eq faulty_result
   end
   
+  it 'should handle tables' do
+    unlinker = Factory::Tagunlinker.new("postland-theory", "periscoping", "foobar")
+    unlinker.text = File.open(File.expand_path("spec/examples/table.html")).readlines
+    #unlinker.unlink!.should eq "fail"
+    unlinker.parse
+    output = unlinker.unlink!
+    output.should_not eq ""
+    puts output
+    #unlinker.errors.should == []
+    
+  end
+  
 end
