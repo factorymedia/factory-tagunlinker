@@ -1,6 +1,6 @@
 # Factory::Tagunlinker
 
-TODO: Write a gem description
+Remove dead tagged links from content
 
 ## Installation
 
@@ -18,7 +18,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+unlinker = Factory::Tagunlinker.new("list","of","tags")
+unlinker.file_name = "file.txt"
+puts unlinker.unlink!
+```
+
+or
+```ruby
+unlinker = Factory::Tagunlinker.new("list","of","tags")
+unlinker.text = File.read('file.txt').readlines
+puts unlinker.unlink!
+```
 
 ## Contributing
 

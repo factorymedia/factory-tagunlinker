@@ -22,7 +22,7 @@ module Factory
     end
 
     # Strip out HREFs which contain a given tag and return the 
-    def untag!
+    def unlink!
       parse
       @tags.each do |tag|
         @doc.xpath("//a[ends_with(@href,'#{tag}')]", EndsWithFilter.new).each do |element|

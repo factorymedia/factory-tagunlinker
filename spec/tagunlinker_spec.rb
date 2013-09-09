@@ -19,13 +19,13 @@ As it turns out, this didn't stop them at all. So the guys popped out this littl
   it 'should unlink tags from a file' do
     unlinker = Factory::Tagunlinker.new("postland-theory", "periscoping", "foobar")
     unlinker.file_name = example
-    unlinker.untag!.should eq result
+    unlinker.unlink!.should eq result
   end
   
   it 'should unlink tags from  a string' do
     unlinker = Factory::Tagunlinker.new("postland-theory", "periscoping", "foobar")
     unlinker.text = File.open(example).readlines
-    unlinker.untag!.should eq result
+    unlinker.unlink!.should eq result
   end
   
 end
