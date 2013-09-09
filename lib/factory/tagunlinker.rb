@@ -24,12 +24,18 @@ module Factory
     # Strip out HREFs which contain a given tag and return the 
     def unlink!
       parse
-      @tags.each do |tag|
-        @doc.xpath("//a[ends_with(@href,'#{tag}')]", EndsWithFilter.new).each do |element|
-          element.swap(element.children)
+      if @doc.errors.any?
+        puts @doc.errors.join("\n")
+
+      else
+        @tags.each do |tag|
+          @doc.xpath("//a[ends_with(@href,'#{tag}')]", EndsWithFilter.new).each do |element|
+            element.swap(element.children)
+          end
         end
+
       end
-      @doc.xpath("/#{@wrap_tag}").inner_html
+      @doc.xpath("/#{@wrap_tag}/body/p").inner_html
     end
 
 
@@ -45,21 +51,21 @@ module Factory
 
     # Parse a text string if that was defined
     def parse_text
-      @doc = Nokogiri::XML(wrap(@text)) do |config|
-        config.strict
+      @doc = Nokogiri::HTML(wrap(@text)) do |config|
+        #config.strict
       end
-    rescue
-      log("Error parsing text: #{text}, couldn't continue. Probably faulty HTML")
+    rescue Exception => e
+      log("Error parsing text, couldn't continue. #{e}")
     end
 
     # Parse a file from file or filename if that was defined.
     def parse_file
       @file ||= File.open(@file_name) unless @file_name.nil?
-      @doc = Nokogiri::XML(wrap(@file.readlines)) do |config|
-        config.strict
+      @doc = Nokogiri::HTML(wrap(@file.readlines)) do |config|
+        #config.strict
       end
-    rescue
-      log("Error parsing file #{@file_name}, couldn't continue. Probably faulty HTML")
+    rescue Exception => e
+      log("Error parsing file #{@file_name}, couldn't continue. #{e}")
     ensure
       @file.close unless @file.nil?
     end
